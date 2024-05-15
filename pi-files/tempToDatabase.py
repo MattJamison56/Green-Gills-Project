@@ -1,3 +1,4 @@
+import vonage
 import firebase_admin
 from firebase_admin import credentials, db
 import time
@@ -5,6 +6,11 @@ import random
 from datetime import datetime
 import os
 import glob
+
+# Initialize Vonage client
+client = vonage.Client(key="2edee5d5", secret="5DEoUpVkMbt12cyx")
+sms = vonage.Sms(client)
+sent = False
 
 # Path to the Firebase credentials JSON file
 cred = credentials.Certificate('firebase-cert.json')
@@ -47,8 +53,25 @@ def send_temp_data(temp_c, temp_f):
         'temp_fahrenheit': temp_f
     })
 
+def send_sms(temp_f):
+    responseData = sms.send_message(
+        {
+            "from": "16105782839",
+            "to": "15202257945",
+            "text": f"Warning: High temperature detected! Current temperature is {temp_f:.2f}°F.",
+        }
+    )
+
+    if responseData["messages"][0]["status"] == "0":
+        print("Message sent successfully.")
+        sent = True
+    else:
+        print(f"Message failed with error: {responseData['messages'][0]['error-text']}")
+
 while True:
     temp_c, temp_f = read_temp()
     send_temp_data(temp_c, temp_f)
     print(f'Celsius: {temp_c:.3f}, Fahrenheit: {temp_f:.3f}')
+    if temp_f > 82 and sent == false:
+        send_sms(temp_f)
     time.sleep(5)
