@@ -15,14 +15,14 @@ import { database } from '../../firebase-config';
 import { ref, onValue } from "firebase/database";
 import "./datatable.css";
 
-const DataTable = ({ tablename, columns, dataRef, onDataLoaded }) => {
+const DataTable = ({ tablename, columns, dataRef, onDataLoaded, tempThreshold }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(8);
   const [rows, setRows] = useState([]);
 
   const checkForHighTemperature = (rows) => {
     if (tablename === "Temperature") {
-      const highTempRow = rows.find(row => row.temp_fahrenheit >= 83);
+      const highTempRow = rows.find(row => row.temp_fahrenheit >= tempThreshold);
       if (highTempRow && !toast.isActive('highTempToast')) {
         toast.warn(`High temperature alert: ${highTempRow.temp_fahrenheit}°F at ${highTempRow.timestamp}`, {
           toastId: 'highTempToast'
