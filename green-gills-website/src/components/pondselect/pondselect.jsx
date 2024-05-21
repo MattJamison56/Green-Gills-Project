@@ -5,6 +5,8 @@ import FormControl from '@mui/material/FormControl';
 import { Box, Typography } from '@mui/material';
 
 const PondSelect = ({ selectedPond, handleSelectChange, pondStatuses, overallStatus }) => {
+
+  // Basic function to set the dots next to the individual ponds
   const getStatusColor = (status) => {
     switch (status) {
       case 'ok':
@@ -20,6 +22,7 @@ const PondSelect = ({ selectedPond, handleSelectChange, pondStatuses, overallSta
 
   return (
     <Box display="flex" alignItems="center">
+      {/* The dropdown for the ponds */}
       <FormControl sx={{ width: '10%', margin: '10px' }}>
         <Select
           labelId="pond-select-label"

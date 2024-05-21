@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,51 +10,26 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import TablePagination from '@mui/material/TablePagination';
-import { database } from '../../firebase-config';
-import { ref, onValue } from "firebase/database";
 import "./datatable.css";
 
-const DataTable = ({ tablename, columns, dataRef, onDataLoaded, tempThreshold }) => {
+// Already dynamic woo!!!
+const DataTable = ({ tablename, columns, data }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(8);
   const [rows, setRows] = useState([]);
 
-  const checkForHighTemperature = (rows) => {
-    if (tablename === "Temperature") {
-      const highTempRow = rows.find(row => row.temp_fahrenheit >= tempThreshold);
-      if (highTempRow && !toast.isActive('highTempToast')) {
-        toast.warn(`High temperature alert: ${highTempRow.temp_fahrenheit}°F at ${highTempRow.timestamp}`, {
-          toastId: 'highTempToast'
-        });
-      }
-    }
-  };
 
+  // check for new data to update rows
   useEffect(() => {
-    const tempDataRef = ref(database, dataRef);
-    const unsubscribe = onValue(tempDataRef, (snapshot) => {
-      const data = snapshot.val();
-      const loadedRows = [];
-      if (data) {
-        Object.keys(data).forEach((key) => {
-          loadedRows.push({
-            id: key,
-            ...data[key]
-          });
-        });
-      }
-      setRows(loadedRows);
-      checkForHighTemperature(loadedRows);
-      onDataLoaded(loadedRows);
-    });
-
-    return () => unsubscribe();
-  }, [dataRef]);
+    if (data) {
+      setRows(data);
+    }
+  }, [data]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0); // Reset page to 0 when changing the number of rows per page

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { styled } from '@mui/material/styles';
@@ -23,6 +24,7 @@ import Settings from '../../pages/Settings';
 
 const drawerWidth = 240;
 
+// Don't worry about this. Just forces theme for the pull out menu.
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -42,6 +44,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+// The drawer with custom styling based on if open or closed
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     '& .MuiDrawer-paper': {
@@ -68,8 +71,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function Dashboard() {
-  const [open, setOpen] = useState(false);
+export default function Dashboard({ data }) {
+  const [open, setOpen] = useState(false); // controls the state of sidebar menu
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -85,6 +88,7 @@ export default function Dashboard() {
               pr: '24px', // keep right padding when drawer closed
             }}
           >
+            {/* the hamburger menu button */}
             <IconButton
               edge="start"
               color="inherit"
@@ -97,7 +101,9 @@ export default function Dashboard() {
             >
               <MenuIcon />
             </IconButton>
-
+            
+            {/* the title of the page container */}
+            {/* TODO: make dynamic to the page its on */}
             <Typography
               component="h1"
               variant="h6"
@@ -107,18 +113,23 @@ export default function Dashboard() {
             >
               Dashboard
             </Typography>
-
+            
+            {/* logo on top */}
             <img src={logo} alt="RF Logo" style={{ height: '50px' }} />
             <Box sx={{ flexGrow: 1 }} /> {/* This Box will take up the remaining space to center the logo */}
-
+            
+            {/* notif button */}
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+
           </Toolbar>
         </AppBar>
+        
 
+        {/* Where the sidebar icons are stored on the side */}
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
@@ -134,10 +145,11 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+            {mainListItems} {/* from the listitems file. basically just the menu options */}
           </List>
         </Drawer>
-
+        
+        {/* This is the box that houses the actual page the user is on*/}
         <Box
           component="main"
           sx={{
@@ -154,9 +166,9 @@ export default function Dashboard() {
           <Toolbar />
           <Container maxWidth="x-lg" sx={{ mt: 4, mb: 4 }}>
             <Routes>
-              <Route path="/" element={<DashboardPage />} />
-              <Route path="/statistics" element={<Statistics />} />
-              <Route path="/settings" element={<Settings />} />
+              <Route path="/" element={<DashboardPage data={ data }/>} />
+              <Route path="/statistics" element={<Statistics/>} />
+              <Route path="/settings" element={<Settings/>} />
             </Routes>
           </Container>
         </Box>
