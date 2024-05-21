@@ -20,6 +20,7 @@ import { mainListItems } from './listitems'
 import DataTable from '../datatable/datatable';
 import logo from '../../assets/rf-logo.png';
 import DataChart from '../datachart/datachart'
+import TwitterToSheets from '../updateSheets/updateSheets';
 
 const drawerWidth = 240;
 
@@ -198,6 +199,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
               </Grid>
             </Grid>
           </Container>
+          <TwitterToSheets />
         </Box>
 
         </Box>
