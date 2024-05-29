@@ -1,4 +1,5 @@
-import { useState, useContext } from 'react';
+/* eslint-disable react/prop-types */
+import { useState } from 'react';
 import PondSelect from '../components/pondselect/pondselect';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -6,13 +7,15 @@ import DataChart from '../components/datachart/datachart';
 import DataTable from '../components/datatable/datatable';
 import { Container } from '@mui/material';
 import DataBlock from '../components/datablock/datablock';
-import { ThresholdContext } from '../ThresholdContext';
+import { useThresholdContext } from '../ThresholdContext';
 
-function DashboardPage() {
+function DashboardPage({ data }) {
   const [selectedPond, setSelectedPond] = useState('');
-  const [data, setData] = useState([]);
-  const { tempThreshold } = useContext(ThresholdContext);
+  const { tempThreshold } = useThresholdContext();
 
+
+  // For now, forced set statuses for all ponds
+  // TODO: dynamic pond statuses based on thresholds or if sensors not working
   const pondStatuses = {
     'Pond 1': 'ok',
     'Pond 2': 'ok',
@@ -26,20 +29,21 @@ function DashboardPage() {
     'Pond 10': 'ok'
   };
 
+  // For the big dot next to the pond choice menu
   const getOverallStatus = () => {
     const statuses = Object.values(pondStatuses);
     if (statuses.includes('error')) return 'red';
     if (statuses.includes('warning')) return 'yellow';
     return 'green';
   };
-
   const overallStatus = getOverallStatus();
 
   const handleSelectChange = (event) => {
     setSelectedPond(event.target.value);
   };
 
-
+  // Table Column labels
+  // TODO: Set them for each type of reading
   const tempColumns = [
     { id: 'timestamp', label: 'Timestamp' },
     { id: 'temp_celsius', label: 'Celsius' },
@@ -68,22 +72,28 @@ function DashboardPage() {
                             justifyContent: 'center'
                         }}
                         >
-                        <DataChart name="Temperature" data={data} dataKeyX="timestamp" dataKeyY="temp_fahrenheit" />
+                         {/* Manually set for temparature */}
+                         {/* TODO: dynamically create charts based on which one is supposed to be shown */}
+                        <DataChart name="Temperature" data={data.Temperature} dataKeyX="timestamp" dataKeyY="temp_fahrenheit" />
                     </Paper>
                 </Grid>
                     
                 <Grid item xs={12} md={4} lg={4}>
-                        <DataBlock name="Temperature" data={data}></DataBlock>
+                  {/* Manually set for temparature */}
+                  {/* TODO: dynamically create charts based on which one is supposed to be shown */}
+                  <DataBlock name="Temperature" data={data.Temperature}></DataBlock>
                 </Grid>
 
-                {/* Temp Data */}
+                {/* DataTable */}
                 <Grid item xs={12} md={10} lg={10}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                    {/* Manually set for temparature */}
+                    {/* TODO: dynamically create charts based on which one is supposed to be shown */}
                     <DataTable
                         tablename="Temperature"
                         columns={tempColumns}
                         dataRef="temperatureData"
-                        onDataLoaded={setData}
+                        data = {data.Temperature}
                         tempThreshold={tempThreshold}
                     />
                     </Paper>

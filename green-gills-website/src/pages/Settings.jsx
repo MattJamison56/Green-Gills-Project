@@ -1,30 +1,30 @@
-import { useContext } from 'react';
-import { ThresholdContext } from '../ThresholdContext';
+import { useThresholdContext } from '../ThresholdContext';
 
-function Settings() {
-    const { tempThreshold, setTempThreshold } = useContext(ThresholdContext);
+const Settings = () => {
+  const { thresholds, setThresholds } = useThresholdContext();
 
-    const handleInputChange = (event) => {
-        const value = event.target.value;
-        if (!isNaN(value)) {
-          setTempThreshold(value);
-        }
-      };
+  const handleThresholdChange = (event) => {
+    const { name, value } = event.target;
+    setThresholds(prevThresholds => ({
+      ...prevThresholds,
+      [name]: parseFloat(value)
+    }));
+  };
 
-      return (
-        <div>
-          <h2>Settings</h2>
-          <div>
-            <label htmlFor="temp-threshold">Temperature Threshold: </label>
-            <input
-              type="text"
-              id="temp-threshold"
-              value={tempThreshold}
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-      );
-    }
-    
-    export default Settings;
+  return (
+    <div>
+      <label>
+        Temperature Threshold:
+        <input
+          type="number"
+          name="temp_fahrenheit"
+          value={thresholds.temp_fahrenheit}
+          onChange={handleThresholdChange}
+        />
+      </label>
+      {/* Add other threshold inputs as needed */}
+    </div>
+  );
+};
+
+export default Settings;

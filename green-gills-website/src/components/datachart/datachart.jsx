@@ -4,6 +4,8 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Typography, Box } from '@mui/material';
 
+// Uses the data and keys to make a chart
+// Already dynamic woo!!!
 const DataChart = ({ name, data, dataKeyX, dataKeyY }) => {
   return (
     <Box sx={{ width: 'auto', height: 400, margin: 5}}>
