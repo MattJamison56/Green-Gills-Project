@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -21,6 +21,9 @@ import logo from '../../assets/rf-logo.png';
 import DashboardPage from '../../pages/DashboardPage';
 import Statistics from '../../pages/Statistics';
 import Settings from '../../pages/Settings';
+import Notifications from '../../pages/Notifications';
+import { useNotificationContext } from '../../NotificationContext';
+
 
 const drawerWidth = 240;
 
@@ -71,8 +74,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
+
 export default function Dashboard({ data }) {
   const [open, setOpen] = useState(false); // controls the state of sidebar menu
+  const { notifications } = useNotificationContext();
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -119,8 +124,8 @@ export default function Dashboard({ data }) {
             <Box sx={{ flexGrow: 1 }} /> {/* This Box will take up the remaining space to center the logo */}
             
             {/* notif button */}
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
+            <IconButton color="inherit" component={Link} to='/notifications'>
+              <Badge badgeContent={notifications.length} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -169,9 +174,9 @@ export default function Dashboard({ data }) {
               <Route path="/" element={<DashboardPage data={ data }/>} />
               <Route path="/statistics" element={<Statistics/>} />
               <Route path="/settings" element={<Settings/>} />
+              <Route path="/notifications" element={<Notifications />} />
             </Routes>
           </Container>
-          <TwitterToSheets />
         </Box>
       </Box>
     </Router>

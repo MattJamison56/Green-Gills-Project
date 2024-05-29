@@ -22,7 +22,8 @@ const DataTable = ({ tablename, columns, data }) => {
   // check for new data to update rows
   useEffect(() => {
     if (data) {
-      setRows(data);
+      const sortedData = [...data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      setRows(sortedData);
     }
   }, [data]);
 
