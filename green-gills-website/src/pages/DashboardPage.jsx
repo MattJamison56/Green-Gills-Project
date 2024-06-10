@@ -51,6 +51,7 @@ function DashboardPage({ data }) {
 
   return (
     <div>
+      <h2>Overview</h2>
         <PondSelect
             selectedPond={selectedPond}
             handleSelectChange={handleSelectChange}
