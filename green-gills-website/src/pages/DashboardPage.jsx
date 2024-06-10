@@ -8,6 +8,7 @@ import DataTable from '../components/datatable/datatable';
 import { Container } from '@mui/material';
 import DataBlock from '../components/datablock/datablock';
 import { useThresholdContext } from '../ThresholdContext';
+import RunCamera from '../components/runcamera/runcamera';
 
 function DashboardPage({ data }) {
   const [selectedPond, setSelectedPond] = useState('');
@@ -98,15 +99,11 @@ function DashboardPage({ data }) {
                     />
                     </Paper>
                 </Grid>
-
-                {/* Iframe for the external link */}
+                
+                {/* Video Stream */}
                 <Grid item xs={12}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <iframe
-                            src="http://192.168.0.236:8889/cam1/"
-                            style={{ width: '100%', height: '500px', border: 'none' }}
-                            title="External Content"
-                        ></iframe>
+                        <RunCamera />
                     </Paper>
                 </Grid>
             </Grid>
