@@ -62,7 +62,7 @@ const DataBlock = ({ name, data }) => {
       </div>
       <div style={{ fontSize: "16px", display: "flex", alignItems: "center", color: changeColor }}>
         <span style={{ fontSize: "18px", marginRight: "5px" }}>{isPositive ? "▲" : "▼"}</span>
-        {Math.abs(change)}° F
+        {Math.abs(change).toFixed(3)}° F
       </div>
     </div>
   );
