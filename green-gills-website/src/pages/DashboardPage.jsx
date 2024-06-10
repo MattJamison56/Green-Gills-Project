@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import React from 'react';
 import { useState } from 'react';
 import PondSelect from '../components/pondselect/pondselect';
 import Grid from '@mui/material/Grid';
@@ -12,7 +13,6 @@ import { useThresholdContext } from '../ThresholdContext';
 function DashboardPage({ data }) {
   const [selectedPond, setSelectedPond] = useState('');
   const { tempThreshold } = useThresholdContext();
-
 
   // For now, forced set statuses for all ponds
   // TODO: dynamic pond statuses based on thresholds or if sensors not working
@@ -42,64 +42,96 @@ function DashboardPage({ data }) {
     setSelectedPond(event.target.value);
   };
 
-  // Table Column labels
-  // TODO: Set them for each type of reading
-  const tempColumns = [
-    { id: 'timestamp', label: 'Timestamp' },
-    { id: 'temp_celsius', label: 'Celsius' },
-    { id: 'temp_fahrenheit', label: 'Fahrenheit' }
-  ];
+  // Define column labels for different data types
+  const columns = {
+    temp: [
+      { id: 'timestamp', label: 'Timestamp' },
+      { id: 'temp_celsius', label: 'Celsius' },
+      { id: 'temp_fahrenheit', label: 'Fahrenheit' }
+    ],
+    ph: [
+      { id: 'timestamp', label: 'Timestamp' },
+      { id: 'ph_value', label: 'pH Value' }
+    ],
+    tds: [
+      { id: 'timestamp', label: 'Timestamp' },
+      { id: 'tds_value', label: 'TDS Value' }
+    ]
+  };
 
+  const getDataKeyY = (name) => {
+    switch (name) {
+      case 'Temp':
+        return 'temp_fahrenheit';
+      case 'Ph':
+        return 'ph_value';
+      case 'Tds':
+        return 'tds_value';
+      default:
+        return '';
+    }
+  };
 
   return (
     <div>
-        <PondSelect
-            selectedPond={selectedPond}
-            handleSelectChange={handleSelectChange}
-            pondStatuses={pondStatuses}
-            overallStatus={overallStatus}
-        />
-        <Container>
-            <Grid container spacing={3} justifyContent="center">
+      <PondSelect
+        selectedPond={selectedPond}
+        handleSelectChange={handleSelectChange}
+        pondStatuses={pondStatuses}
+        overallStatus={overallStatus}
+      />
+      <Container>
+        <Grid container spacing={3} justifyContent="center">
+          {Object.keys(data).map((key) => {
+            const name = key.charAt(0).toUpperCase() + key.slice(1);
+            //console.log(`Rendering components for key: ${key}, name: ${name}, data:`, data[key]);
+            return (
+              <React.Fragment key={key}>
                 {/* Chart */}
                 <Grid item xs={12} md={8} lg={8}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignContent: 'center',
-                            justifyContent: 'center'
-                        }}
-                        >
-                         {/* Manually set for temparature */}
-                         {/* TODO: dynamically create charts based on which one is supposed to be shown */}
-                        <DataChart name="Temperature" data={data.Temperature} dataKeyX="timestamp" dataKeyY="temp_fahrenheit" />
-                    </Paper>
+                  <Paper
+                    sx={{
+                      p: 2,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignContent: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <DataChart
+                      name={name}
+                      data={data[key]}
+                      dataKeyX="timestamp"
+                      dataKeyY={getDataKeyY(name)}
+                    />
+                  </Paper>
                 </Grid>
-                    
+
+                {/* Data Block */}
                 <Grid item xs={12} md={4} lg={4}>
-                  {/* Manually set for temparature */}
-                  {/* TODO: dynamically create charts based on which one is supposed to be shown */}
-                  <DataBlock name="Temperature" data={data.Temperature}></DataBlock>
+                  <DataBlock
+                    name={name}
+                    data={data[key]}
+                  />
                 </Grid>
 
                 {/* DataTable */}
                 <Grid item xs={12} md={10} lg={10}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                    {/* Manually set for temparature */}
-                    {/* TODO: dynamically create charts based on which one is supposed to be shown */}
+                  <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                     <DataTable
-                        tablename="Temperature"
-                        columns={tempColumns}
-                        dataRef="temperatureData"
-                        data = {data.Temperature}
-                        tempThreshold={tempThreshold}
+                      tablename={name}
+                      columns={columns[key]}
+                      dataRef={`${key}Data`}
+                      data={data[key]}
+                      tempThreshold={tempThreshold}
                     />
-                    </Paper>
+                  </Paper>
                 </Grid>
-            </Grid>
-        </Container>
+              </React.Fragment>
+            );
+          })}
+        </Grid>
+      </Container>
     </div>
   );
 }

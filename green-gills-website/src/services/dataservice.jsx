@@ -8,16 +8,18 @@ export const fetchData = (dataRef, callback) => {
   const tempDataRef = ref(database, dataRef);
   const unsubscribe = onValue(tempDataRef, (snapshot) => {
     const data = snapshot.val();
-    const loadedRows = [];
+    const organizedData = [];
+
     if (data) {
       Object.keys(data).forEach((key) => {
-        loadedRows.push({
+        organizedData.push({
           id: key,
           ...data[key]
         });
       });
     }
-    callback(loadedRows);
+
+    callback(organizedData);
   });
 
   return unsubscribe;

@@ -7,24 +7,29 @@ import { fetchData } from './services/dataservice';
 import { checkThresholds } from './services/thresholdservice';
 
 const MainApp = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({ temp: [], ph: [], tds: [] });
   const { thresholds } = useThresholdContext();
   const { addNotification } = useNotificationContext();
 
   useEffect(() => {
     const dataRefs = [
-      { name: "Temperature", path: "temperatureData" }
-      // Add more data types as needed. The path is the name of json section in the firebase.
+      { name: "temp", path: "pond1/temperatureData" },
+      { name: "ph", path: "pond1/phData" },
+      { name: "tds", path: "pond1/tdsData" }
     ];
 
     const dataListeners = {};
 
     dataRefs.forEach((dataRef) => {
       const unsubscribe = fetchData(dataRef.path, (loadedRows) => {
-        setData(prevData => ({
-          ...prevData,
-          [dataRef.name]: loadedRows
-        }));
+        setData(prevData => {
+          const newData = {
+            ...prevData,
+            [dataRef.name]: loadedRows
+          };
+          //console.log('Updated data:', newData);  // Console log the updated data object
+          return newData;
+        });
       });
 
       dataListeners[dataRef.name] = unsubscribe;
@@ -37,6 +42,7 @@ const MainApp = () => {
 
   // checks for change in data or thresholds
   useEffect(() => {
+    //console.log('Data object:', data);  // Console log the data object
     Object.keys(data).forEach(key => {
       checkThresholds(data[key], thresholds, addNotification);
     });
