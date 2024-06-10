@@ -7,6 +7,8 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import SettingsIcon from '@mui/icons-material/Settings';
 
+//list of options of navbar
+
 export const mainListItems = (
   <React.Fragment>
     <ListItemButton component={Link} to="/">

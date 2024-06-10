@@ -26,6 +26,8 @@ import { useNotificationContext } from '../../NotificationContext';
 
 
 const drawerWidth = 240;
+// this page is the border of everything: dashboard
+
 
 // Don't worry about this. Just forces theme for the pull out menu.
 const AppBar = styled(MuiAppBar, {
@@ -74,7 +76,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-
+// NOT A DASHBOARD. this is the page container.
 export default function Dashboard({ data }) {
   const [open, setOpen] = useState(false); // controls the state of sidebar menu
   const { notifications } = useNotificationContext();

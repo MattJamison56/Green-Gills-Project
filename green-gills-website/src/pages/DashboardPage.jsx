@@ -13,7 +13,6 @@ function DashboardPage({ data }) {
   const [selectedPond, setSelectedPond] = useState('');
   const { tempThreshold } = useThresholdContext();
 
-
   // For now, forced set statuses for all ponds
   // TODO: dynamic pond statuses based on thresholds or if sensors not working
   const pondStatuses = {
@@ -50,7 +49,6 @@ function DashboardPage({ data }) {
     { id: 'temp_fahrenheit', label: 'Fahrenheit' }
   ];
 
-
   return (
     <div>
         <PondSelect
@@ -61,41 +59,76 @@ function DashboardPage({ data }) {
         />
         <Container>
             <Grid container spacing={3} justifyContent="center">
-                {/* Chart */}
-                <Grid item xs={12} md={8} lg={8}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignContent: 'center',
-                            justifyContent: 'center'
-                        }}
+                {/* Temperature Section */}
+                <Grid container item xs={12} spacing={3} alignItems="flex-start">
+                    <Grid item xs={12} md={8} lg={8}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignContent: 'center',
+                                justifyContent: 'center'
+                            }}
                         >
-                         {/* Manually set for temparature */}
-                         {/* TODO: dynamically create charts based on which one is supposed to be shown */}
-                        <DataChart name="Temperature" data={data.Temperature} dataKeyX="timestamp" dataKeyY="temp_fahrenheit" />
-                    </Paper>
+                            <DataChart name="Temperature" data={data.Temperature} dataKeyX="timestamp" dataKeyY="temp_fahrenheit" />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={4} lg={4}>
+                        <DataBlock name="Temperature" data={data.Temperature} />
+                    </Grid>
                 </Grid>
-                    
-                <Grid item xs={12} md={4} lg={4}>
-                  {/* Manually set for temparature */}
-                  {/* TODO: dynamically create charts based on which one is supposed to be shown */}
-                  <DataBlock name="Temperature" data={data.Temperature}></DataBlock>
+
+                {/* pH Section */}
+                <Grid container item xs={12} spacing={3} alignItems="flex-start">
+                    <Grid item xs={12} md={8} lg={8}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignContent: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <DataChart name="pH" data={data.Temperature} dataKeyX="timestamp" dataKeyY="pH" />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={4} lg={4}>
+                        <DataBlock name="pH" data={data.Temperature} />
+                    </Grid>
+                </Grid>
+
+                {/* TDS Section */}
+                <Grid container item xs={12} spacing={3} alignItems="flex-start">
+                    <Grid item xs={12} md={8} lg={8}>
+                        <Paper
+                            sx={{
+                                p: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignContent: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <DataChart name="TDS" data={data.Temperature} dataKeyX="timestamp" dataKeyY="TDS" />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12} md={4} lg={4}>
+                        <DataBlock name="TDS" data={data.Temperature} />
+                    </Grid>
                 </Grid>
 
                 {/* DataTable */}
                 <Grid item xs={12} md={10} lg={10}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                    {/* Manually set for temparature */}
-                    {/* TODO: dynamically create charts based on which one is supposed to be shown */}
-                    <DataTable
-                        tablename="Temperature"
-                        columns={tempColumns}
-                        dataRef="temperatureData"
-                        data = {data.Temperature}
-                        tempThreshold={tempThreshold}
-                    />
+                        <DataTable
+                            tablename="Temperature"
+                            columns={tempColumns}
+                            dataRef="temperatureData"
+                            data={data.Temperature}
+                            tempThreshold={tempThreshold}
+                        />
                     </Paper>
                 </Grid>
             </Grid>
