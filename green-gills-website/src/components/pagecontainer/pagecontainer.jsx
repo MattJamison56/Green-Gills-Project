@@ -74,7 +74,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-
+// NOT A DASHBOARD. This is the page container
 export default function Dashboard({ data }) {
   const [open, setOpen] = useState(false); // controls the state of sidebar menu
   const { notifications } = useNotificationContext();
@@ -116,12 +116,12 @@ export default function Dashboard({ data }) {
               noWrap
               sx={{ flexGrow: 0.8 }}
             >
-              Dashboard
+              {/*Title of page*/}
             </Typography>
             
             {/* logo on top */}
             <img src={logo} alt="RF Logo" style={{ height: '50px' }} />
-            <Box sx={{ flexGrow: 1 }} /> {/* This Box will take up the remaining space to center the logo */}
+            <Box sx={{ flexGrow: 0.80 }} /> {/* This Box will take up the remaining space to center the logo */}
             
             {/* notif button */}
             <IconButton color="inherit" component={Link} to='/notifications'>
@@ -172,7 +172,7 @@ export default function Dashboard({ data }) {
           <Container maxWidth="x-lg" sx={{ mt: 4, mb: 4 }}>
             <Routes>
               <Route path="/" element={<DashboardPage data={ data }/>} />
-              <Route path="/statistics" element={<Statistics/>} />
+              <Route path="/statistics" element={<Statistics data={ data }/>} />
               <Route path="/settings" element={<Settings/>} />
               <Route path="/notifications" element={<Notifications />} />
             </Routes>

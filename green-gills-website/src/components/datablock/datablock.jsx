@@ -3,6 +3,7 @@
 import { FaThermometerHalf, FaFlask, FaTint } from "react-icons/fa";
 import { useEffect, useState } from "react";
 
+// Need to eventually pass thresholds into here so the GREEN=OK and RED=BAD not just up and down
 const DataBlock = ({ name, data }) => {
   const [stat, setStat] = useState(0);
   const [change, setChange] = useState(0);
@@ -45,11 +46,11 @@ const DataBlock = ({ name, data }) => {
   // changes icon based on data type
   const getIcon = () => {
     switch (name) {
-      case "Temperature":
+      case "Temp":
         return <FaThermometerHalf style={{ fontSize: "30px", color: changeIconColor }} />;
-      case "pH":
+      case "Ph":
         return <FaFlask style={{ fontSize: "30px", color: changeIconColor }} />;
-      case "TDS":
+      case "Tds":
         return <FaTint style={{ fontSize: "30px", color: changeIconColor }} />;
       default:
         return null;
@@ -58,10 +59,10 @@ const DataBlock = ({ name, data }) => {
 
   const formatStat = () => {
     switch (name) {
-      case "Temperature":
+      case "Temp":
         return `${stat.toFixed(2)}° F`;
-      case "pH":
-      case "TDS":
+      case "Ph":
+      case "Tds":
         return `${stat.toFixed(2)}`;
       default:
         return `${stat.toFixed(2)}`;

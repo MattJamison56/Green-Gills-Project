@@ -6,6 +6,7 @@ const Notifications = () => {
   const { notifications, removeNotification } = useNotificationContext();
 
   return (
+    <div>
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
@@ -30,6 +31,7 @@ const Notifications = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    </div>
   );
 };
 

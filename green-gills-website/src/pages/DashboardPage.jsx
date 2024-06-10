@@ -5,14 +5,11 @@ import PondSelect from '../components/pondselect/pondselect';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import DataChart from '../components/datachart/datachart';
-import DataTable from '../components/datatable/datatable';
 import { Container } from '@mui/material';
 import DataBlock from '../components/datablock/datablock';
-import { useThresholdContext } from '../ThresholdContext';
 
 function DashboardPage({ data }) {
   const [selectedPond, setSelectedPond] = useState('');
-  const { tempThreshold } = useThresholdContext();
 
   // For now, forced set statuses for all ponds
   // TODO: dynamic pond statuses based on thresholds or if sensors not working
@@ -42,23 +39,6 @@ function DashboardPage({ data }) {
     setSelectedPond(event.target.value);
   };
 
-  // Define column labels for different data types
-  const columns = {
-    temp: [
-      { id: 'timestamp', label: 'Timestamp' },
-      { id: 'temp_celsius', label: 'Celsius' },
-      { id: 'temp_fahrenheit', label: 'Fahrenheit' }
-    ],
-    ph: [
-      { id: 'timestamp', label: 'Timestamp' },
-      { id: 'ph_value', label: 'pH Value' }
-    ],
-    tds: [
-      { id: 'timestamp', label: 'Timestamp' },
-      { id: 'tds_value', label: 'TDS Value' }
-    ]
-  };
-
   const getDataKeyY = (name) => {
     switch (name) {
       case 'Temp':
@@ -74,6 +54,7 @@ function DashboardPage({ data }) {
 
   return (
     <div>
+      <h2>Dashboard</h2>
       <PondSelect
         selectedPond={selectedPond}
         handleSelectChange={handleSelectChange}
@@ -87,45 +68,35 @@ function DashboardPage({ data }) {
             //console.log(`Rendering components for key: ${key}, name: ${name}, data:`, data[key]);
             return (
               <React.Fragment key={key}>
-                {/* Chart */}
-                <Grid item xs={12} md={8} lg={8}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignContent: 'center',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <DataChart
+                {/* Complete Sensor Stuff (Dy) */}
+                <Grid container item xs={12} spacing={3} alignItems="flex-start">
+                  {/* Chart */}
+                  <Grid item xs={12} md={8} lg={8}>
+                    <Paper
+                        sx={{
+                          p: 2,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignContent: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        <DataChart
+                          name={name}
+                          data={data[key]}
+                          dataKeyX="timestamp"
+                          dataKeyY={getDataKeyY(name)}
+                        />
+                    </Paper>
+                  </Grid>
+
+                  {/* Data Block */}
+                  <Grid item xs={12} md={4} lg={4}>
+                    <DataBlock
                       name={name}
                       data={data[key]}
-                      dataKeyX="timestamp"
-                      dataKeyY={getDataKeyY(name)}
                     />
-                  </Paper>
-                </Grid>
-
-                {/* Data Block */}
-                <Grid item xs={12} md={4} lg={4}>
-                  <DataBlock
-                    name={name}
-                    data={data[key]}
-                  />
-                </Grid>
-
-                {/* DataTable */}
-                <Grid item xs={12} md={10} lg={10}>
-                  <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                    <DataTable
-                      tablename={name}
-                      columns={columns[key]}
-                      dataRef={`${key}Data`}
-                      data={data[key]}
-                      tempThreshold={tempThreshold}
-                    />
-                  </Paper>
+                  </Grid>
                 </Grid>
               </React.Fragment>
             );
