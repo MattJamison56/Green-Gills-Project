@@ -14,7 +14,7 @@ const RunCamera = () => {
       </button>
       {showIframe && (
         <iframe
-          src="http://192.168.0.236:8889/cam1/"
+          src="http://192.168.0.235:8889/cam1/"
           style={{ width: '100%', height: '500px', border: 'none', marginTop: '10px' }}
           title="Camera Feed"
         ></iframe>
